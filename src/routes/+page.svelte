@@ -104,6 +104,12 @@
     loadHunger();
     loadWater();
     loadHistory();
+
+    // Link into sign-up screen
+    const params = new URLSearchParams( window.location.search );
+    if( params.has( 'signup' ) ) {
+      settings.showModal();
+    }
   } );
 
   function formatLocalDate( date ) {

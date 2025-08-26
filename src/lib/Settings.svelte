@@ -1,42 +1,106 @@
 <script>
-  import Icon from "@iconify/svelte";
+  import LoginSection from "./LoginSection.svelte";
+  import SignUpSection from "./SignUpSection.svelte";
+  import TokenSection from "./TokenSection.svelte";
+
+  let {authenticated = false} = $props();
 
   let dialog = $state();
+  let login_disabled = $state( false );
+  let login_email = $state( '' );
+  let screen = $state( 'signup' );
+  let signup_disabled = $state( false );
+  let signup_email = $state( '' );
+  let signup_message = $state( '' );  
+  let token_disabled = $state( false );
+  let token_value = $state( '' );
 
-  function onDoneClick() {
+  function onLoginCancel() {
+    screen = 'signup';
+    login_disabled = false;
+  }
+
+  function onLoginDone() {
+    close();    
+  }
+
+  function onLoginVerify( email ) {
+    login_email = email;
+    login_disabled = true;
+  }
+
+  function onSignUpDone() {
     close();
+  }
+
+  function onSignUpLogin() {
+    screen = 'login';
+  }
+
+  function onSignUpSend( form ) {
+    signup_disabled = true;
+  }
+
+  function onTokenCancel() {
+    screen = 'signup';
+    token_disabled = false;
+  }  
+
+  function onTokenDone() {
+    close(); 
+  }  
+
+  function onTokenLogin( otp ) {
+    token_value = otp;
+    token_disabled = true;
   }
 
   export function close() {
     dialog.close();
+
+    screen = 'signup';
+
+    signup_disabled = false;         
+    signup_email = null;
+    signup_message = null;
+    
+    login_disabled = false;
+    login_email = null;
+
+    token_disabled = false;
+    token_value = null;
   }
 
   export function showModal() {
     dialog.showModal();
-  }
+  }  
 </script>
 
 <dialog bind:this={dialog}>
 
-  <figure>
-    <button onclick={onDoneClick} type="button">
-      <Icon height="24" icon="material-symbols:cancel-rounded" width="24" />
-    </button>
-    <div>
-      <h3>Fasting Hours</h3>
-      <p>Want more features?</p>
-      <ul>
-        <li>Data backup</li>
-        <li>Sync across devices</li>
-        <li>Export data</li>
-      </ul>
-      <p>Send me a message with the login email address that you would like to use. The first ten messages get a lifetime account for <span>FREE</span>.</p>      
-    </div>
-  </figure>
-
-  <article>
-
-  </article>
+  {#if screen === 'signup'}
+    <SignUpSection 
+      disabled={signup_disabled}
+      email={signup_email}
+      message={signup_message}
+      ondone={onSignUpDone} 
+      onlogin={onSignUpLogin} 
+      onsend={onSignUpSend} />
+  {:else if screen === 'login'}
+    <LoginSection 
+      disabled={login_disabled}
+      email={login_email}
+      oncancel={onLoginCancel} 
+      ondone={onLoginDone}
+      onverify={onLoginVerify} />
+  {:else if screen === 'token'}      
+    <TokenSection
+      disabled={token_disabled}
+      oncancel={onTokenCancel}
+      ondone={onTokenDone}
+      onlogin={onTokenLogin}
+      value={token_value} />
+  {/if}
 
 </dialog>
 
@@ -50,10 +114,6 @@
       transform: translateY( 0 );
       opacity: 1.0;
     }
-  }
-
-  article {
-    height: 330px;
   }
 
   dialog {
@@ -73,94 +133,5 @@
   dialog[open] {
     animation: open 0.30s forwards;
     display: flex;
-  }
-
-  figure {
-    background-image: url( /plate.png );
-    background: 
-      linear-gradient( 
-        rgba( 0, 0, 0, 0.10 ), 
-        rgba( 0, 0, 0, 0.50 ) 
-      ), 
-      url( '/plate.png' );    
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    height: 330px;    
-    margin: 0;
-    padding: 0;
-    position: relative;
-    width: 100%;
-  }
-
-  figure button {
-    align-items: center;
-    appearance: none;
-    background: none;
-    border: none;
-    border-radius: 4px;
-    color: #ffffff;
-    cursor: pointer;
-    display: flex;
-    height: 40px;
-    justify-content: center;
-    margin: 12px 12px 0 auto;
-    outline: none;
-    padding: 0;
-    width: 40px;
-    -webkit-tap-highlight-color: transparent;
-  }  
-
-  figure div {
-    margin: auto 0 16px 0;
-  }
-
-  h3 {
-    color: #ffffff;
-    cursor: default;
-    font-family: 'Roboto Variable', sans-serif;
-    font-size: 28px;
-    font-weight: 600;
-    margin: 0 0 0 24px;
-    padding: 0;
-    text-shadow: 0 0 4px rgba( 0, 0, 0, 0.60 );
-  }  
-
-  p {
-    color: #ffffff;
-    cursor: default;
-    font-family: 'Roboto Variable', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    letter-spacing: 0.10px;
-    line-height: 24px;
-    margin: 0;
-    padding: 0 24px 0 24px;
-    text-shadow: 0 0 4px rgba( 0, 0, 0, 0.60 );
-  }
-
-  p span {
-    font-weight: 600;
-  }
-
-  ul {
-    display: flex;
-    flex-direction: column;
-    margin: 0 0 0 16px;
-    padding: 4px 0 4px 40px;
-  }
-
-  ul li {
-    color: #ffffff;
-    cursor: default;
-    font-family: 'Roboto Variable', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    letter-spacing: 0.10px;
-    line-height: 24px;
-    text-shadow: 0 0 4px rgba( 0, 0, 0, 0.60 );
   }
 </style>

@@ -19,7 +19,7 @@
   }
 
   function onDeleteClick() {
-    if( ondelete ) ondelete( item.id );
+    if( ondelete ) ondelete( field, item.id );
   }  
 
   function onNotesChange( evt ) {

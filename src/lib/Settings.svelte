@@ -39,6 +39,30 @@
 
   function onSignUpSend( form ) {
     signup_disabled = true;
+    console.log( form );
+
+    fetch( 'https://ketnerlake.com/api/message', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify( {
+        source: 'Fasting Hours', 
+        email: form.email, 
+        category: 'Sign Up', 
+        subject: 'Sync Interest',
+        message: form.message
+      } )
+    } )
+    .then( ( response ) => response.text() )
+    .then( ( id ) => {
+      console.log( id );
+      signup_email = null;
+      signup_message = null;
+      dialog.close();
+      signup_disabled = false;      
+      alert( 'Thanks for your message!' );
+    } );
   }
 
   function onTokenCancel() {

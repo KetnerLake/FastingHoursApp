@@ -6,7 +6,14 @@
   import WaterGraph from "./WaterGraph.svelte";
   import WeightGraph from "./WeightGraph.svelte";
 
-  let {activity = null, days = 10, onsun, sun, water = null, weight = []} = $props();   
+  let {
+    activity = null, 
+    days = 10, 
+    onsun, 
+    sun,
+    water = null, 
+    weight = []
+  } = $props();   
 
   const options = [
     {icon: 'material-symbols:local-fire-department-outline-rounded', label: 'Fasting', value: 0},

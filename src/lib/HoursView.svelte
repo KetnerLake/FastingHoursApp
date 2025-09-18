@@ -9,7 +9,8 @@
     onchange, 
     onsun,
     sun = null,
-    volume
+    volume,
+    weight
   } = $props();
 </script>
 
@@ -25,7 +26,8 @@
       days={7}
       {onsun}
       {sun}
-      water={volume} />
+      water={volume}
+      {weight} />
   </div>    
 
   <article>

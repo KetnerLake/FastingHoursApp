@@ -11,6 +11,7 @@
   import ScreenGroup from "$lib/ScreenGroup.svelte";
   import Settings from "$lib/Settings.svelte";  
   import WaterEditor from "$lib/WaterEditor.svelte";
+  import WeightEditor from "$lib/WeightEditor.svelte";
 
   const db = new Database();
   const SunCalc = daylight;  
@@ -19,6 +20,7 @@
 
   let activity = $state( null );
   let duration = $state( 0 );
+  let ended = $state( null );
   let history = $state( [] );
   let history_editor = $state();
   let history_field = $state( 'started' );  
@@ -37,6 +39,9 @@
   let water = $state( 0 );
   let water_editor = $state();
   let water_item = $state( null );
+  let weight = $state( [] );  
+  let weight_editor = $state();
+  let weight_item = $state( null );
 
   let levels = $state( [
     {value: 1, label: 'Starving'}, 
@@ -103,6 +108,7 @@
     loadActivity();
     loadHunger();
     loadWater();
+    loadWeight();
     loadHistory();
 
     // Link into sign-up screen
@@ -235,6 +241,14 @@
           return value;
         } );
         chronos = chronos.concat( data );
+        return db.browseWeight();
+      } )
+      .then( ( data ) => {
+        data = data.map( ( value ) => {
+          value.timed = new Date( value.created.getTime() );
+          return value;
+        } );
+        chronos = chronos.concat( data );
         return db.browseWater();
       } )
       .then( ( data ) => {
@@ -318,6 +332,7 @@
       if( data.length === 0 ) {
         started = null;
         now = null;
+        ended = null;
       }
 
       data.sort( ( a, b ) => {
@@ -329,6 +344,9 @@
       if( data[0].ended === null ) {
         started = new Date( data[0].started.getTime() );
         now = Date.now();
+        ended = null;
+      } else {
+        ended = new Date( data[0].ended.getTime() );
       }
     } );
   }
@@ -402,6 +420,11 @@
     } );    
   }
 
+  function loadWeight() {
+    db.browseWeight()
+    .then( ( data ) => weight = data === null ? [] : [... data] ); 
+  }  
+
   function toLocalDateKey( date ) {
     const y = date.getFullYear();
     const m = String( date.getMonth() + 1 ).padStart( 2, '0' );
@@ -439,7 +462,13 @@
     } );
   }
 
-  function onHistoryDelete( id ) {
+  function onFastingWeight() {
+    weight_editor.showModal();    
+  }
+
+  function onHistoryDelete( field, id ) {
+    console.log( 'Delete: ' + id );
+
     // If deletion is actively running fast
     if( started !== null ) {
       if( history_item.started.getTime() === started.getTime() ) {
@@ -497,6 +526,12 @@
       .then( ( data ) => {
         water_item = {... data};
         water_editor.showModal();
+      } );
+    } else if( source === 'weight' ) { 
+      db.readWeight( id )
+      .then( ( data ) => {
+        weight_item = {... data};
+        weight_editor.showModal();
       } );
     } else if( source === 'hunger' ) {
       db.readHunger( id )
@@ -587,15 +622,51 @@
       loadHistory();
     } );      
   }
+
+  function onWeightDelete( id ) {
+    db.deleteWeight( id )
+    .then( () => {
+      weight_editor.close();
+      weight_item = null;
+      loadWeight();
+      loadHistory();
+    } );
+  }  
+
+  function onWeightSave( value ) {
+    console.log( value );
+    if( !value.id ) {
+      db.addWeight( value )
+      .then( ( item ) => {
+        weight_editor.close();
+        weight_item = null; 
+        loadWeight();
+        loadHistory();
+      } );          
+    } else {
+      db.editWeight( value )
+      .then( ( data ) => {
+        weight_editor.close();
+        weight_item = null;
+        loadWeight();
+        loadHistory();
+      } );      
+    }
+  }
 </script>
 
 <main>
 
   <header>
-    <span></span>
+    <button class="icon" onclick={onFastingWeight} type="button">
+      <Icon height="20" icon="hugeicons:weight-scale" width="20" />
+    </button>      
     <ScreenGroup onchange={onScreenChange} value={screen} />
     <button onclick={onSettingsClick} type="button">
-      <Icon height="20" icon="material-symbols:person-outline-rounded" width="20" />
+      <Icon 
+        height="20" 
+        icon="material-symbols:person-outline-rounded" 
+        width="20" />
     </button>
   </header>
 
@@ -604,6 +675,7 @@
       <FastingView 
         {activity} 
         {duration}
+        {ended}
         {hunger} 
         {levels} 
         {now}
@@ -614,11 +686,13 @@
         onstart={onFastingStart}
         onsun={onSunEnable}
         onwater={onWaterAdd}
+        onweight={onFastingWeight}
         {started}
         {sun}
         {volume}
         {volumes}
-        {water} />
+        {water} 
+        {weight} />
     </article>
     <article>
       <HoursView 
@@ -628,7 +702,8 @@
         onchange={onHoursChange} 
         onsun={onSunEnable}
         {sun}
-        {volume} />
+        {volume}
+        {weight} />
     </article>
   </section>
 
@@ -654,6 +729,11 @@
   ondelete={onWaterDelete}
   onsave={onWaterSave}
   options={volumes} />
+<WeightEditor 
+  bind:this={weight_editor} 
+  item={weight_item}
+  ondelete={onWeightDelete}
+  onsave={onWeightSave} />
 <Settings bind:this={settings} />
 
 <style>
@@ -709,6 +789,10 @@
     grid-template-columns: 44px 1fr 44px;
     padding: 16px 12px 0 12px;
     width: 100%;
+  }
+
+  header button:first-of-type {
+    justify-self: start;
   }
 
   main {

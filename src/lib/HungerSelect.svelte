@@ -46,6 +46,7 @@
 <label>
 
   <button bind:this={button} onclick={onButtonClick} tabindex="-1" type="button">
+    <Icon height="20" icon="material-symbols:fork-spoon-rounded" width="20" />
     <span>{label}</span>
     <Icon height="20" icon="material-symbols:keyboard-arrow-down-rounded" width="20" />
   </button>
@@ -163,7 +164,7 @@
     height: 40px;
     margin: 0;
     outline: none;
-    padding: 0 32px 0 12px;
+    padding: 0 32px 0 40px;
     width: 100%;
     -webkit-tap-highlight-color: transparent;
   }  
@@ -191,7 +192,7 @@
   ul li.selected button {
     background: #0284c7;
     color: #ffffff;
-    padding: 0 12px 0 12px;    
+    padding: 0 12px 0 40px;    
   }
 
   ul li.selected button span {

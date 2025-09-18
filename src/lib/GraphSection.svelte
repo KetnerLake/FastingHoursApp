@@ -2,18 +2,31 @@
   import ActivityGraph from "./ActivityGraph.svelte";
   import GraphSelect from "./GraphSelect.svelte";  
   import Icon from "@iconify/svelte";
+  import { onMount } from "svelte";  
   import WaterGraph from "./WaterGraph.svelte";
+  import WeightGraph from "./WeightGraph.svelte";
 
-  let {activity = null, days = 10, onsun, sun, water = null} = $props();   
+  let {activity = null, days = 10, onsun, sun, water = null, weight = []} = $props();   
 
   const options = [
     {icon: 'material-symbols:local-fire-department-outline-rounded', label: 'Fasting', value: 0},
-    {icon: 'material-symbols:water-drop-outline-rounded', label: 'Water', value: 1} 
+    {icon: 'material-symbols:water-drop-outline-rounded', label: 'Water', value: 1},
+    {icon: 'hugeicons:weight-scale', label: 'Weight', value: 2}     
   ];
 
   // {icon: 'material-symbols:fork-spoon-rounded', label: 'Hunger', value: 2}       
   
   let graph = $state( 0 );
+
+  onMount( () => {
+    const stored = window.localStorage.getItem( 'fh_graph' );
+    graph = stored === null ? 0 : parseInt( stored );
+  } );
+
+  function onGraphClick( item ) {
+    window.localStorage.setItem( 'fh_graph', item.value );
+    graph = item.value;
+  }
 
   function formatTime( value ) {
     const formatter = new Intl.DateTimeFormat( navigator.language, {
@@ -34,7 +47,9 @@
   {:else if graph === 1}
     <WaterGraph 
       average={water && water.average ? water.average : null}
-      daily={water && water.daily ? water.daily : null} />  
+      daily={water && water.daily ? water.daily : null} />
+  {:else if graph === 2}
+    <WeightGraph value={weight} />        
   {/if}
 
   <footer>
@@ -51,7 +66,8 @@
     <GraphSelect 
       items={options} 
       mount="top" 
-      onchange={( item ) => graph = item.value} />
+      onchange={( item ) => onGraphClick( item )}
+      value={graph} />
   </footer>
 
 </section>
@@ -109,7 +125,7 @@
     flex-direction: row;
     flex-grow: 1;
     gap: 6px;
-    padding: 0 0 0 64px;
+    padding: 0;
   }  
 
   section {

@@ -103,11 +103,14 @@
 
   label > button span {
     color: #161616;
+    flex-basis: 0;
+    flex-grow: 1;
     font-family: 'Roboto Variable', sans-serif;
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.10px;
     line-height: 20px;
+    text-align: left;
   }
 
   label > button:focus {

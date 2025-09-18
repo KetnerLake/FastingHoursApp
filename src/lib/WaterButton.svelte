@@ -109,7 +109,13 @@
   label > button:focus {
     border: solid 1px #0284c7;
     box-shadow: 0 0 0 3px rgb( from #0284c7 r g b / 0.40 );    
-  } 
+  }
+  
+  label > button span:last-of-type {    
+    flex-basis: 0;
+    flex-grow: 1;
+    text-align: left;
+  }
 
   ul {
     background: #ffffff;

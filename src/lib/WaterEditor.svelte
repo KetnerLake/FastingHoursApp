@@ -46,7 +46,7 @@
 <dialog bind:this={dialog}>
 
   <h3>Edit Water</h3>
-
+    
   <WaterSelect 
     items={options} 
     onchange={onSizeChange} 

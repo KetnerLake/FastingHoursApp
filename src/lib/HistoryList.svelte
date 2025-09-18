@@ -32,6 +32,11 @@
     return formatter.format( value );    
   }
 
+  function formatNumber( value ) {
+    const formatter = new Intl.NumberFormat( navigator.language );
+    return formatter.format( value );    
+  }
+
   function formatTime( value ) {
     const formatter = new Intl.DateTimeFormat( navigator.language, {
       hour: 'numeric',
@@ -69,6 +74,11 @@
               <p>{item.volume} oz</p>
               <p>{formatDate( item.timed )}</p>
               <p>{formatTime( item.timed )}</p>
+            {:else if item.type === 'weight'}
+              <p>Weight</p>
+              <p>{formatNumber( item.weight )} {item.units}</p>
+              <p>{formatDate( item.timed )}</p>
+              <p>{formatTime( item.timed )}</p>              
             {:else if item.type === 'hunger'}
               <p>{item.level}</p>
               <p></p>

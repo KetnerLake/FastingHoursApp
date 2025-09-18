@@ -3,10 +3,11 @@ import Dexie from "dexie";
 export class Database {
   constructor() {
     this._db = new Dexie( 'FastingHours' );
-    this._db.version( 20 ).stores( {
+    this._db.version( 30 ).stores( {
       history: 'id, started',
       hunger: 'id, created',
-      water: 'id, created'
+      water: 'id, created',
+      weight: 'id, created'
     } );    
   }
 
@@ -132,5 +133,48 @@ export class Database {
 
   deleteWater( id ) {
     return this._db.water.delete( id );
+  }
+  
+  browseWeight( filter = false ) {
+    return this._db.weight.toArray().then( ( data ) => {    
+      if( filter ) {
+        const start = new Date();
+        start.setHours( 0 );
+        start.setMinutes( 0 );
+        start.setSeconds( 0 );
+        start.setMilliseconds( 0 );
+
+        const end = new Date( start.getTime() );
+        end.setDate( end.getDate() + 1 );
+
+        return data.filter( ( value ) => value.created.getTime() > start.getTime() && value.created.getTime() < end.getTime() ? true : false );
+      } else {
+        return data;
+      }
+    } );
+  }
+
+  readWeight( id ) {
+    return this._db.weight.get( {id} );
+  }  
+
+  editWeight( item ) {
+    const clone = $state.snapshot( item );    
+    return this._db.weight.put( clone ).then( () => this._db.weight.get( {id: item.id} ) );
+  }
+  
+  addWeight( item ) {
+    const id = crypto.randomUUID();    
+    const clone = $state.snapshot( item );    
+    clone.id = id;
+
+    console.log( 'ADD' );
+    console.log( clone );
+
+    return this._db.weight.add( clone ).then( () => this._db.weight.get( {id} ) );      
+  }  
+
+  deleteWeight( id ) {
+    return this._db.weight.delete( id );
   }  
 }

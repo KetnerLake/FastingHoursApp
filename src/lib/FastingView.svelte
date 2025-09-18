@@ -9,6 +9,7 @@
   let {
     activity = null,
     duration = 0,
+    ended = null,
     hunger = 5, 
     levels = [],
     now = null, 
@@ -19,11 +20,13 @@
     onstart, 
     onsun,
     onwater,
+    onweight,
     started = null, 
     sun = null,
     volume = null,
     volumes = [],
-    water = 0
+    water = 0,
+    weight = []
   } = $props();
 
   function formatStarted( value ) {
@@ -48,20 +51,33 @@
       if( onend ) onend();
     }
   }
+
+  function onWeightClick() {
+    if( onweight ) onweight();
+  }
 </script>
 
 <section>
 
   <header>
-    <h3>Fasting</h3>
-    <button onclick={onsettings} type="button">
-      <Icon height="20" icon="material-symbols:person-outline-rounded" width="20" />      
+    <h3>Fasting</h3>      
+    <button class="icon" onclick={onWeightClick} type="button">
+      <Icon height="20" icon="hugeicons:weight-scale" width="20" />
+    </button>      
+    <button class="icon" onclick={onsettings} type="button">
+      <Icon 
+        height="20" 
+        icon="material-symbols:person-outline-rounded" 
+        width="20" />      
     </button>
   </header>
 
   <article>
     {#if started === null}
       <p>You are not fasting.</p>  
+      {#if ended !== null}
+        <p class="started ended">Your last fast ended<br>{formatStarted( ended )}</p>
+      {/if}
     {:else}
       <p>You are fasting.</p>    
       <Timer {duration} {now} {started} />    
@@ -79,7 +95,8 @@
       days={7}
       {onsun}
       {sun}
-      water={volume} />
+      water={volume}
+      {weight} />
   </div>
 
   <footer>
@@ -120,20 +137,7 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  footer {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 12px 16px 12px 16px;
-  }
-
-  header {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    padding: 16px 16px 0 16px    
-  }
-
-  header button {
+  button.icon {
     align-items: center;
     appearance: none;
     background: none;
@@ -151,6 +155,28 @@
     padding: 0;
     width: 40px;
     -webkit-tap-highlight-color: transparent;
+  }  
+
+  footer {
+    /*
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    */
+
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    justify-content: space-between;
+
+    padding: 12px 16px 12px 16px;
+  }
+
+  header {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    padding: 16px 16px 0 16px    
   }
 
   header h3 {
@@ -188,6 +214,11 @@
     line-height: 20px;
     margin: 0;
     padding: 0;    
+  }
+
+  p.ended {
+    padding: 0 0 8px 0;
+    text-align: center;
   }
 
   section {

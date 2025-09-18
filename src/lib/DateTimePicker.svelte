@@ -142,21 +142,25 @@
   }
 
   header button p:last-of-type {
-    background: transparent;    
-    border: solid 1px #00000040;
+    background: #00000010;    
+    border: solid 1px transparent;
     border-radius: 4px;
-    font-size: 12px;
-    line-height: 28px;
+    font-size: 14px;
+    line-height: 30px;
     padding: 0 12px 0 12px;
     transition: 
-      background 0.30s ease-in-out,
       border 0.30s ease-in-out,
+      box-shadow 0.30s ease-in-out,      
       color 0.30s ease-in-out;    
   }
 
   header button.selected p:last-of-type {
+    color: #0284c7;    
+  }
+
+  header button:focus p:last-of-type {
     color: #0284c7;
-    background: #00000010;
     border: solid 1px #0284c7;
+    box-shadow: 0 0 0 3px rgb( from #0284c7 r g b / 0.40 );        
   }
 </style>

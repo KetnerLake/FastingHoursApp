@@ -41,7 +41,7 @@
 
 <label>
 
-  <button bind:this={button} onclick={onButtonClick} type="button">
+  <button bind:this={button} onclick={onButtonClick} tabindex="0" type="button">
     <Icon height="20" icon={icon} width="20" />
     <span>{label}</span>
     <Icon height="20" icon="material-symbols:keyboard-arrow-down-rounded" width="20" />

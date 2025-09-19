@@ -168,7 +168,7 @@
     gap: 16px;
     justify-content: space-between;
 
-    padding: 12px 16px 12px 16px;
+    padding: 12px 16px 16px 16px;
   }
 
   header {

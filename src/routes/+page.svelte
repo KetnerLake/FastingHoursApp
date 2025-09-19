@@ -818,6 +818,10 @@
   }  
 
 @media( max-width: 780px ) {
+  :global( body ) {
+    padding-bottom: env( safe-area-inset-bottom );                
+  }
+
   article:last-of-type {
     max-width: unset;
   }

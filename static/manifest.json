@@ -5,7 +5,7 @@
     {
       "purpose": "any",
       "sizes": "512x512",
-      "src": "/fh.png",
+      "src": "/fh_rounded.png",
       "type": "image/png"
     }
   ],

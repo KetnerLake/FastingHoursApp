@@ -78,7 +78,7 @@
   </form>
 
   <footer>
-    <button class="login" {disabled} onclick={onLoginClick} style:display="none" type="button">Login</button>    
+    <button class="login" {disabled} onclick={onLoginClick} type="button">Login</button>    
     <button {disabled} onclick={onSendClick} type="button">Send</button>    
   </footer>        
 

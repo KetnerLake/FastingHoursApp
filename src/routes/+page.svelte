@@ -13,7 +13,19 @@
   import WaterEditor from "$lib/WaterEditor.svelte";
   import WeightEditor from "$lib/WeightEditor.svelte";
 
+  let authenticated = $state( false );  
   const db = new Database();
+  const user = db.user();
+  user.subscribe( ( evt ) => {
+    if( evt && evt.isLoggedIn ) {
+      authenticated = true;
+      settings.close();
+      db.sync();
+    } else {
+      authenticated = false;
+    }
+  } );
+
   const SunCalc = daylight;  
 
   let seconds = 0;
@@ -734,7 +746,7 @@
   item={weight_item}
   ondelete={onWeightDelete}
   onsave={onWeightSave} />
-<Settings bind:this={settings} />
+<Settings {authenticated} bind:this={settings} />
 
 <style>
   :global( html ) {

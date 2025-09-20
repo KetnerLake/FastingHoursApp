@@ -14,8 +14,42 @@ export class Database {
       customLoginGui: true,      
       databaseUrl: 'https://zzcxr8dte.dexie.cloud',
       requireAuth: false
+    } );
+  }
+
+  check( email ) {
+    return fetch( 'https://ketnerlake.com/api/dexie/check', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify( {server: 'zzcxr8dte', email} )
     } );    
   }
+
+  login( otp ) {
+    this._db.cloud.userInteraction.onSubmit( {otp} );
+  }
+
+  logout() {
+    return this._db.cloud.logout();
+  }  
+
+  sync() {
+    return this._db.cloud.sync( {purpose: 'pull', wait: true} );
+  }  
+
+  ui() {
+    return this._db.cloud.userInteraction;
+  }
+
+  user() {
+    return this._db.cloud.currentUser;
+  }
+
+  verify( email ) {
+    return this._db.cloud.login( {email, grant_type: 'otp'} );
+  }  
 
   browseHistory() {
     return this._db.history.toArray();
@@ -26,6 +60,10 @@ export class Database {
       const empties = data.filter( ( value ) => value.ended === null ? true : false );
       return empties[0];
     } );
+  }
+
+  bulkHistory( items ) {
+    return this._db.history.bulkAdd( items );
   }
 
   readHistory( id ) {
@@ -71,6 +109,10 @@ export class Database {
     } );
   }
 
+  bulkHunger( items ) {
+    return this._db.hunger.bulkAdd( items );
+  }  
+
   readHunger( id ) {
     return this._db.hunger.get( {id} );
   }
@@ -114,6 +156,10 @@ export class Database {
       }
     } );
   }
+
+  bulkWater( items ) {
+    return this._db.water.bulkAdd( items );
+  }  
 
   readWater( id ) {
     return this._db.water.get( {id} );
@@ -159,6 +205,10 @@ export class Database {
       }
     } );
   }
+
+  bulkWeight( items ) {
+    return this._db.weight.bulkAdd( items );
+  }  
 
   readWeight( id ) {
     return this._db.weight.get( {id} );

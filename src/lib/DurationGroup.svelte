@@ -13,8 +13,8 @@
   <button class:selected={value === 0 ? true : false} onclick={() => onDurationClick( 0 )} type="button">
     <Icon height="20" icon="stash:infinity-duotone" width="20" />
   </button>                        
-  <button class:selected={value === 14 ? true : false} onclick={() => onDurationClick( 14 )} type="button">14h</button>                
-  <button class:selected={value === 16 ? true : false} onclick={() => onDurationClick( 16 )} type="button">16h</button>        
+  <button class:selected={value === 16 ? true : false} onclick={() => onDurationClick( 16 )} type="button">16h</button>                
+  <button class:selected={value === 18 ? true : false} onclick={() => onDurationClick( 18 )} type="button">18h</button>        
   <button class:selected={value === 23 ? true : false} onclick={() => onDurationClick( 23 )} type="button">23h</button>        
   <button class:selected={value === 40 ? true : false} onclick={() => onDurationClick( 40 )} type="button">40h</button>                  
 </div>

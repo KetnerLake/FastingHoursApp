@@ -1,20 +1,23 @@
 import Dexie from "dexie";
-import dexieCloud from "dexie-cloud-addon";
+// import dexieCloud from "dexie-cloud-addon";
 
 export class Database {
   constructor() {
-    this._db = new Dexie( 'FastingHours', {addons: [dexieCloud]} );
+    // this._db = new Dexie( 'FastingHours', {addons: [dexieCloud]} );
+    this._db = new Dexie( 'FastingHours' );    
     this._db.version( 30 ).stores( {
       history: 'id, started',
       hunger: 'id, created',
       water: 'id, created',
       weight: 'id, created'
     } );    
+    /*
     this._db.cloud.configure( {
       customLoginGui: true,      
       databaseUrl: 'https://zzcxr8dte.dexie.cloud',
       requireAuth: false
     } );
+     */
   }
 
   check( email ) {

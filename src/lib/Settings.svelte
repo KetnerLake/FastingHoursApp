@@ -8,11 +8,13 @@
   let {authenticated = false} = $props();
   
   const db = new Database();
+  /*
   const auth = db.ui().subscribe( ( evt ) => {
     if( evt && evt.type && evt.type === 'otp' ) {
       submit = evt.onSubmit;
     }
   } );
+  */
 
   let submit = null;  
 

@@ -2,6 +2,7 @@
   import "@fontsource-variable/roboto";   
   import { Database } from "$lib/Database.svelte";  
   import daylight from "suncalc";      
+  import About from "$lib/About.svelte";
   import FastingView from "$lib/FastingView.svelte";
   import HistoryEditor from "$lib/HistoryEditor.svelte";    
   import HoursView from "$lib/HoursView.svelte";
@@ -15,6 +16,7 @@
 
   let authenticated = $state( false );  
   const db = new Database();
+  /*
   const user = db.user();
   user.subscribe( ( evt ) => {
     if( evt && evt.isLoggedIn ) {
@@ -25,11 +27,13 @@
       authenticated = false;
     }
   } );
+  */
 
   const SunCalc = daylight;  
 
   let seconds = 0;
 
+  let about = $state( null );
   let activity = $state( null );
   let duration = $state( 0 );
   let ended = $state( null );
@@ -444,6 +448,10 @@
     return `${y}-${m}-${d}`;
   }  
 
+  function onAboutClick() {
+    about.showModal();
+  }
+
   function onFastingDuration( value ) {
     duration = value;
     window.localStorage.setItem( 'fh_duration', duration );
@@ -674,12 +682,20 @@
       <Icon height="20" icon="hugeicons:weight-scale" width="20" />
     </button>      
     <ScreenGroup onchange={onScreenChange} value={screen} />
+    <button onclick={onAboutClick} type="button">
+      <Icon 
+        height="20" 
+        icon="material-symbols:question-mark-rounded" 
+        width="20" />
+    </button>    
+    <!--
     <button onclick={onSettingsClick} type="button">
       <Icon 
         height="20" 
         icon="material-symbols:person-outline-rounded" 
         width="20" />
     </button>
+    -->
   </header>
 
   <section data-screen={screen === 0 ? 'fasting' : 'hours'}>
@@ -747,6 +763,7 @@
   ondelete={onWeightDelete}
   onsave={onWeightSave} />
 <Settings {authenticated} bind:this={settings} />
+<About bind:this={about} />
 
 <style>
   :global( html ) {
@@ -807,6 +824,10 @@
     justify-self: start;
   }
 
+  header button:last-of-type {
+    display: none;
+  }
+
   main {
     align-items: center;
     box-sizing: border-box;
@@ -840,6 +861,10 @@
 
   header {
     display: grid;
+  }
+
+  header button:last-of-type {
+    display: flex;
   }
 
   section {

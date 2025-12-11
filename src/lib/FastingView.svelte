@@ -64,12 +64,14 @@
     <button class="icon" onclick={onWeightClick} type="button">
       <Icon height="20" icon="hugeicons:weight-scale" width="20" />
     </button>      
+    <!--
     <button class="icon" onclick={onsettings} type="button">
       <Icon 
         height="20" 
         icon="material-symbols:person-outline-rounded" 
         width="20" />      
     </button>
+    -->    
   </header>
 
   <article>
@@ -104,6 +106,7 @@
       items={levels} 
       onchange={onhunger} 
       value={hunger} />
+    <p>Made with ❤️ by <a href="https://kevinhoyt.com" target="_blank">Kevin Hoyt</a>.</p>
     <WaterButton 
       items={volumes} 
       onchange={onwater} 
@@ -163,12 +166,18 @@
     grid-template-columns: 1fr 1fr;
     */
 
+    align-items: center;
     display: flex;
     flex-direction: row;
     gap: 16px;
     justify-content: space-between;
 
     padding: 12px 16px 16px 16px;
+  }
+
+  footer a {
+    color: #0284c7;
+    text-decoration: none;
   }
 
   header {
@@ -243,6 +252,10 @@
 
   @media( max-width: 780px ) {  
     div.graph {
+      display: none;
+    }
+
+    footer p {
       display: none;
     }
 

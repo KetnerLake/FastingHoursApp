@@ -110,8 +110,10 @@
       <Timer {duration} {now} {started} />    
       <DurationGroup onchange={onduration} value={duration} />
       <p class="started">Started {formatStarted( started )}</p>
-      {#if duration !== 0 && started.getTime() < ending.getTime()}
-        <p class="ending">Ending {formatEnding()}</p>
+      {#if duration !== 0}
+        {#if ending !== null && started.getTime() < ending.getTime()}
+          <p class="ending">Ending {formatEnding()}</p>
+        {/if}
       {/if}
     {/if}
     <button class="primary" onclick={onFastingClick} type="button">

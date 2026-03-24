@@ -29,6 +29,24 @@
     weight = []
   } = $props();
 
+  function formatEnding( value ) {
+    if ( value === null ) return null;
+
+    const ending = new Date( value.getTime() );
+    ending.setHours( ending.getHours() + duration );
+
+    const formatter = new Intl.DateTimeFormat( navigator.language, {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit'
+    } );
+
+    return formatter.format( ending );    
+  }
+
   function formatStarted( value ) {
     if( value === null ) return null;
 
@@ -85,6 +103,9 @@
       <Timer {duration} {now} {started} />    
       <DurationGroup onchange={onduration} value={duration} />
       <p class="started">Started {formatStarted( started )}</p>
+      {#if duration !== 0}
+        <p class="ending">Ending {formatEnding( started )}</p>
+      {/if}
     {/if}
     <button class="primary" onclick={onFastingClick} type="button">
       {started === null ? 'Start' : 'Stop'} fasting
@@ -229,6 +250,18 @@
     padding: 0 0 8px 0;
     text-align: center;
   }
+
+  p.ending {
+    color: #00000040;
+    cursor: default;
+    font-family: 'Roboto Variable', sans-serif;
+    font-size: 14px;
+    font-weight: 400;    
+    letter-spacing: 0.10px;
+    line-height: 20px;
+    margin: -8px 0 0 0;
+    padding: 0;    
+  }  
 
   section {
     border-right: solid 1px #00000040;

@@ -29,11 +29,18 @@
     weight = []
   } = $props();
 
-  function formatEnding( value ) {
-    if ( value === null ) return null;
+  let ending = $derived.by( () => {
+    if( started === null ) return null;
+    if( duration === 0 ) return null;
 
-    const ending = new Date( value.getTime() );
-    ending.setHours( ending.getHours() + duration );
+    const projected = new Date( started.getTime() );
+    projected.setHours( projected.getHours() + duration );
+
+    return projected;
+  } );
+
+  function formatEnding() {
+    if( ending === null ) return null;
 
     const formatter = new Intl.DateTimeFormat( navigator.language, {
       weekday: 'long',
@@ -103,8 +110,8 @@
       <Timer {duration} {now} {started} />    
       <DurationGroup onchange={onduration} value={duration} />
       <p class="started">Started {formatStarted( started )}</p>
-      {#if duration !== 0}
-        <p class="ending">Ending {formatEnding( started )}</p>
+      {#if duration !== 0 && started.getTime() < ending.getTime()}
+        <p class="ending">Ending {formatEnding()}</p>
       {/if}
     {/if}
     <button class="primary" onclick={onFastingClick} type="button">

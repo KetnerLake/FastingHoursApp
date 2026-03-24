@@ -111,7 +111,7 @@
       <DurationGroup onchange={onduration} value={duration} />
       <p class="started">Started {formatStarted( started )}</p>
       {#if duration !== 0}
-        {#if ending !== null && started.getTime() < ending.getTime()}
+        {#if Date.now() < ending?.getTime()}
           <p class="ending">Ending {formatEnding()}</p>
         {/if}
       {/if}

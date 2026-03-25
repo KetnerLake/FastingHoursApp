@@ -5,12 +5,12 @@
     {
       "purpose": "any",
       "sizes": "192x192",
-      "src": "/fh_rounded_192.png",
+      "src": "https://app.fastinghours.com/fh_rounded_192.png",
       "type": "image/png"
     }, {
       "purpose": "any",
       "sizes": "512x512",
-      "src": "/fh_rounded.png",
+      "src": "https://app.fastinghours.com/fh_rounded.png",
       "type": "image/png"
     }
   ],
@@ -20,8 +20,8 @@
   "lang": "en-US",
   "name": "Fasting Hours",
   "short_name": "Fasting",
-  "start_url": "https://fastinghours.com",
-  "scope": "https://fastinghours.com",
+  "start_url": "https://app.fastinghours.com",
+  "scope": "https://app.fastinghours.com",
   "description": "Track your fasting hours.",
-  "id": "https://fastinghours.com"
+  "id": "fastinghoursapp"
 }
